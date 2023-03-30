@@ -7,7 +7,7 @@ def sum_mixed_list(mxd_lst: List[Union[float, int]]) -> float:
     """Computes sum of floats
 
     Args:
-        input_list(list[float])
+        mxd_lst(list[float | int])
     """
     sum: float = 0.0
     for n in mxd_lst:
