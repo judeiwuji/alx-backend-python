@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Module: Multiple tasks"""
 import asyncio
 from typing import List
