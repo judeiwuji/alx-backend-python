@@ -2,10 +2,10 @@
 """Module: """
 import asyncio
 import random
-from typing import AsyncGenerator
+from typing import Iterator
 
 
-async def async_generator() -> AsyncGenerator[float, None]:
+async def async_generator() -> Iterator[float]:
     """Async Generator: generates numbers
     """
     for i in range(10):
