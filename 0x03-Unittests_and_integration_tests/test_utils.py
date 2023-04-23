@@ -28,7 +28,7 @@ class TestAccessNestedMap(unittest.TestCase):
          'path': ("a", "b"), }, KeyError)
     ])
     def test_access_nested_map_exception(self, name: str,
-                                         input: Dict[str, Union[Dict, Tuple]],
+                                         input: Dict[str, Union[Dict, Tuple[str]]],
                                          expected: Union[int, Dict]):
         """Test access nested map exception"""
         with self.assertRaises(expected):
