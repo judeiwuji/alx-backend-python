@@ -2,7 +2,7 @@
 """Module: Test utils"""
 import unittest
 from parameterized import parameterized
-from typing import Dict, Union,
+from typing import Dict, Union
 utils = __import__("utils")
 
 
