@@ -2,7 +2,7 @@
 """Module: Test utils"""
 import unittest
 from parameterized import parameterized
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 utils = __import__("utils")
 
 
@@ -16,7 +16,8 @@ class TestAccessNestedMap(unittest.TestCase):
         ("nested_map", {'nested_map': {
          "a": {"b": 2}}, 'path': ("a", "b"), }, 2)
     ])
-    def test_access_nested_map(self, name: str, input: Dict,
+    def test_access_nested_map(self, name: str,
+                               input: Dict[str, Union[Dict, Tuple]],
                                expected: Union[int, Dict]):
         """Test cases for test_access_nested_map"""
         self.assertEqual(utils.access_nested_map(**input), expected)
