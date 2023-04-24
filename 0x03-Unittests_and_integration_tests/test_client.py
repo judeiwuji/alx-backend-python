@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import unittest
 from unittest.mock import patch, MagicMock, Mock, PropertyMock
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import (GithubOrgClient)
 from typing import Dict
+from fixtures import (TEST_PAYLOAD)
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -33,7 +34,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
     @patch("client.get_json")
     def test_public_repos(self, mock_get_json: Mock):
-        """Test public repos"""
+        """Test public repos method"""
         mock_get_json.return_value = [{'name': 'google'}]
 
         with patch("client.GithubOrgClient._public_repos_url",
@@ -54,3 +55,28 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_has_license(self, input: Dict[str, Dict[str, str]], expected: bool):
         """Test has license method"""
         self.assertEqual(GithubOrgClient.has_license(**input), expected)
+
+
+def get_side_effect():
+    """get side effect method"""
+    return TEST_PAYLOAD[1]
+
+
+@parameterized_class(("org_payload", "repos_payload",
+                      "expected_repos", "apache2_repos"), TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Test integration GithubOrgClient"""
+    @classmethod
+    def setUpClass(cls) -> None:
+        """setup class method"""
+        cls.mock_get = Mock("requests.get")
+        cls.mock_get.json = MagicMock()
+        cls.mock_get.json.side_effect = get_side_effect
+
+        cls.get_patcher = patch("requests.get", spec=True)
+        cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """tear down class method"""
+        cls.get_patcher.stop()
