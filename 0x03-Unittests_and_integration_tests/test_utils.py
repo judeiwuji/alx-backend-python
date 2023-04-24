@@ -41,7 +41,7 @@ class TestGetJson(unittest.TestCase):
     """Test Get Json"""
 
     @mock.patch("utils.requests")
-    def test_get_json(self, mock_requests):
+    def test_get_json(self, mock_requests: mock.Mock):
         """Test Get JSON"""
         mock_response = mock.MagicMock()
         mock_response.status_code = 200
