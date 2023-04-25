@@ -25,17 +25,14 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(utils.access_nested_map(**input), expected)
 
     @parameterized.expand([
-        ("nested_map", {'nested_map': {}, 'path': ("a",), }, KeyError),
-        ("nested_map", {'nested_map': {"a": 1},
-         'path': ("a", "b"), }, KeyError)
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map_exception(self, name: str,
-                                         input:
-                                         Dict[str, Union[Dict, Tuple[str]]],
-                                         expected: Union[int, Dict]):
+    def test_access_nested_map_exception(self, nested_map: Dict,
+                                         path: Tuple):
         """Test access nested map exception"""
-        with self.assertRaises(expected):
-            utils.access_nested_map(**input)
+        with self.assertRaises(KeyError):
+            utils.access_nested_map(nested_map=nested_map, path=path)
 
 
 class TestGetJson(unittest.TestCase):
