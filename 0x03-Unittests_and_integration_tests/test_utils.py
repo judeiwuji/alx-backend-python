@@ -41,20 +41,20 @@ class TestAccessNestedMap(unittest.TestCase):
 class TestGetJson(unittest.TestCase):
     """Test Get Json"""
 
-    @parameterized.expand([("payload", {"payload": True}),
-                           ("payload", {"payload": False})])
+    @parameterized.expand([("http://example.com", {"payload": True}),
+                           ("http://holberton.io", {"payload": False})])
     @mock.patch("utils.requests")
-    def test_get_json(self, _, input: Dict[str, bool],
+    def test_get_json(self, test_url: str, test_payload: Dict[str, bool],
                       mock_requests: mock.Mock):
         """Test Get JSON"""
 
         mock_response = mock.MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = input
+        mock_response.json.return_value = test_payload
         mock_requests.get.return_value = mock_response
         self.assertEqual(utils.get_json(
-            "http://example.com"), mock_response.json())
-        mock_requests.get.assert_called_with("http://example.com")
+            test_url), mock_response.json())
+        mock_requests.get.assert_called_with(test_url)
 
 
 class TestMemoize(unittest.TestCase):
