@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module: TestGithubOrgClient"""
 import unittest
 from unittest.mock import patch, MagicMock, Mock, PropertyMock
 from parameterized import parameterized, parameterized_class
