@@ -52,14 +52,10 @@ class TestGithubOrgClient(unittest.TestCase):
         ({"repo": {"license": {"key": "other_license"}},
          "license_key": "my_license"}, False)
     ])
-    def test_has_license(self, input: Dict[str, Dict[str, str]], expected: bool):
+    def test_has_license(self, input: Dict[str, Dict[str, str]],
+                         expected: bool):
         """Test has license method"""
         self.assertEqual(GithubOrgClient.has_license(**input), expected)
-
-
-def get_side_effect():
-    """get side effect method"""
-    return TEST_PAYLOAD[1]
 
 
 @parameterized_class(("org_payload", "repos_payload",
@@ -69,14 +65,20 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """setup class method"""
-        cls.mock_get = Mock("requests.get")
-        cls.mock_get.json = MagicMock()
-        cls.mock_get.json.side_effect = get_side_effect
-
-        cls.get_patcher = patch("requests.get", spec=True)
-        cls.get_patcher.start()
+        cls.get_patcher = patch("requests.get")
+        mock_get = cls.get_patcher.start()
+        mock_response = MagicMock()
+        mock_response.json.side_effect = [
+            TEST_PAYLOAD[0][0], TEST_PAYLOAD[0][1]]
+        mock_get.return_value = mock_response
 
     @classmethod
     def tearDownClass(cls) -> None:
         """tear down class method"""
         cls.get_patcher.stop()
+
+    def test_public_repos_with_license(self):
+        """test public repos with license"""
+        client = GithubOrgClient("google")
+        data = client.public_repos(license="apache-2.0")
+        self.assertEqual(data, self.apache2_repos)
